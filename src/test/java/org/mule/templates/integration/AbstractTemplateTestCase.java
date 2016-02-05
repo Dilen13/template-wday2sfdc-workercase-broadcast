@@ -13,6 +13,7 @@ import java.util.Properties;
 
 import org.junit.Rule;
 import org.mule.api.config.MuleProperties;
+import org.mule.construct.Flow;
 import org.mule.tck.junit4.FunctionalTestCase;
 import org.mule.tck.junit4.rule.DynamicPort;
 import org.mule.tck.probe.PollingProber;
@@ -31,7 +32,7 @@ public class AbstractTemplateTestCase extends FunctionalTestCase {
 	private static final String MULE_DEPLOY_PROPERTIES_PATH = "./src/main/app/mule-deploy.properties";
 	protected static final String POLL_FLOW_NAME = "triggerFlow";
 
-	protected final Prober pollProber = new PollingProber(60000, 8000l);
+	protected final Prober pollProber = new PollingProber(600000, 60000l);
 	protected final PipelineSynchronizeListener pipelineListener = new PipelineSynchronizeListener(POLL_FLOW_NAME);
 
 	@Rule
@@ -96,5 +97,7 @@ public class AbstractTemplateTestCase extends FunctionalTestCase {
 		pollProber.check(new ListenerProbe(pipelineListener));
 	}
 
-
+	protected Flow getFlow(String flowName) {
+		return (Flow) muleContext.getRegistry().lookupObject(flowName);
+	}
 }
